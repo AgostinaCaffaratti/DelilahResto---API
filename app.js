@@ -30,7 +30,7 @@ app.listen(app.get ('port'), () => {
 
 
   //Routes
-app.use(require ('./products/product-routes'))
+app.use(require ('./products/product-router'))
 
 
   
