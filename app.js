@@ -17,20 +17,16 @@ app.listen(app.get ('port'), () => {
     console.log('server on port' ,app.get('port'))
 })
 
-//   //verifying connection  
-
-//   sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('DB Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
 
 
   //Routes
-app.use(require ('./products/product-router'))
+  //products
+app.use(require ('./src/products/product-router'))
+
+  //users
+app.use(require('./src/Users/User-router'))
+
+
 
 
   
