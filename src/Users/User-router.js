@@ -11,12 +11,12 @@ router.use(cors())
 process.env.SECRET_KEY = 'secret'
 
 
-router.post('/users', (req,res) => {
+router.post('/users/register', (req,res) => {
     const userData = {
         name: req.body.name,
         completeName: req.body.completeName,
         email: req.body.email,
-        phone: req.body.email,
+        phone: req.body.phone,
         adress: req.body.adress,
         password: req.body.pasword,
         roleId: req.body.roleId
@@ -30,15 +30,10 @@ router.post('/users', (req,res) => {
     })
     .then(user => {
         if(!user){
-            const hash = bcrypt.hashSync(userData.password, 10 )
-            userData.password = hash
             User.create(userData)
              .then( user =>{
-                 let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-
-                     expiresIn: 1440
-                 })
-                 res.json({ token: token })
+                 res.json(user)
+                 
              })
              .catch( err => {
                  res.send ('error:' + err )
@@ -66,7 +61,7 @@ router.post('/user/login', (req, res) => {
             let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
                 expiresIn: 1440
             })
-            res.json({ token: token})
+            res.json({message: 'logged in succesfull', token: token})
         } else{
             res.send('User doesnt exist')
         }
