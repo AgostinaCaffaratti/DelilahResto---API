@@ -66,11 +66,17 @@ const newProduct = router.post('/products', (req, res) =>{
 
 
 const deleteProduct = router.delete('/products/:id', (req, res) => {
-  Plates.destroy({
-    where:{
-      id: req.params.id
-    }
-  }).then( () => res.send('succes'))
+  let {id} = req.params
+  Plates.findByPk(id).then((plates) =>{
+    plates.destroy().then(() => {
+      res.status(204).json({
+        
+          status: '204',
+          message: 'the plate has been deleted'
+        })
+      
+    })
+  } )
 })
 
 
@@ -96,5 +102,3 @@ const modifyProduct = router.put('/products/:id', (req,res) => {
 
 
 module.exports = router, getProducts, getProductById, newProduct, modifyProduct, deleteProduct
-
-

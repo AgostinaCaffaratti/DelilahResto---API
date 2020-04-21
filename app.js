@@ -42,9 +42,9 @@ app.use(require('./src/Users/login-router', loginUser ))
 //midleware
 app.use(require ('./src/middlewares/token-middleware', verifyToken))
 
-
 //products
 app.use(require ('./src/products/product-router', getProducts,  getProductById,  ))
+
 
 
 
