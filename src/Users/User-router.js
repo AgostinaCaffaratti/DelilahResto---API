@@ -1,25 +1,59 @@
 const express = require ('express')
 const router = express.Router()
+const  User = require ('./Users-model')
+const  Role = require ('./Role-model')
 
 const cors = require ('cors')
-const jwt = require ('jsonwebtoken')
-const bcrypt = require ('bcrypt')
 
-const User = require ('./users-model')
+
+
+
 router.use(cors())
 
 process.env.SECRET_KEY = 'secret'
 
+Role.hasMany(User,{
+    foreignKey: 'Role_Id'
+})
 
-router.post('/users/register', (req,res) => {
+// User.belongsTo( Role,{
+//     foreignKey: 'User_Id'
+// } )
+
+
+
+
+const getUsers = router.get('/users', (req, res, err) => {
+    User.findAll(     )
+
+    .then((users) => {
+        if (users){
+          res.json(users)          
+        } else {
+          res.status(400).json({
+            status: '404',
+            message: 'users dont found'
+          })
+        }
+
+    })
+  })
+
+ 
+
+
+
+
+const register = router.post('/users/register', (req,res) => {
     const userData = {
         name: req.body.name,
         completeName: req.body.completeName,
         email: req.body.email,
         phone: req.body.phone,
         adress: req.body.adress,
-        password: req.body.pasword,
-        roleId: req.body.roleId
+        password: req.body.password, 
+        roleId: req.body.roleId  
+          
     }
 
     User.findOne({
@@ -47,30 +81,8 @@ router.post('/users/register', (req,res) => {
     })
 })
 
-router.post('/user/login', (req, res) => {
-    User.findOne({
-        where: {
-            email: req.body.email,
-            password: req.body.password
-        }
-
-    })
-    .then(user => {
-        if(user) {
-        
-            let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-                expiresIn: 1440
-            })
-            res.json({message: 'logged in succesfull', token: token})
-        } else{
-            res.send('User doesnt exist')
-        }
-    })
-    .catch(err => {
-        res.send('error:' + '' + err)
-    })
-})
 
 
 
-module.exports = router
+
+module.exports = router, getUsers, register

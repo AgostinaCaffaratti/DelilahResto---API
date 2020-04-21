@@ -1,9 +1,9 @@
-const sequelize = require ('../../database/sequelize')
+const sequelize = require ('./../../database/sequelize')
 const Sequelize = require ('sequelize')
 
-//table model - plates -
+//table model - Detail Order -
 module.exports = sequelize.define('plates', {
-    id:{
+    Id:{
         field:'Plate_id',
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -12,7 +12,7 @@ module.exports = sequelize.define('plates', {
     },
     name:{
         field: 'Name',
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         validate:{
             notEmpty:{
                 args: true,
@@ -21,7 +21,7 @@ module.exports = sequelize.define('plates', {
         }
     } ,
     price: {
-        field:'price',
+        field:'Price',
         type: Sequelize.FLOAT
     } ,
     available:{
@@ -32,3 +32,5 @@ module.exports = sequelize.define('plates', {
         timestamps: false  
     
 })
+
+

@@ -3,7 +3,10 @@ const Sequelize = require ('sequelize')
 
 const sequelize = new Sequelize('delilah_resto', 'root', '', {
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
+    define: {
+      timestamps: false
+    }
   });
 
   //verifying connection  

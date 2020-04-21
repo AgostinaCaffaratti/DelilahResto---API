@@ -2,6 +2,7 @@
 const express = require ('express')
 const Plates = require ('./product-model')
 
+
 const router = express.Router()
 
 
@@ -9,7 +10,7 @@ const router = express.Router()
   //endpoints:
 
   // /products
-  router.get('/products', (req, res, err) => {
+  const getProducts = router.get('/products', (req, res, err) => {
     Plates.findAll()
     .then((plates) => {
         if (plates){
@@ -25,8 +26,29 @@ const router = express.Router()
   })
 
   
+  //products id
+  
+const getProductById = router.get('/products/:id', (req, res,) => {
+    let { id } = req.params
+    Plates.findByPk(id).then((plate) => {
+      if (plate){
+        res.json(plate)          
+      } else {
+        res.status(400).json({
+          status: '400',
+          message: 'the plate doesnt exist'
+        })
+      }
+    })
 
-router.post('/products', (req, res) =>{
+  })
+
+  
+
+
+
+
+const newProduct = router.post('/products', (req, res) =>{
   Plates.create({
     name: req.body.name,
     price: req.body.price,
@@ -41,24 +63,9 @@ router.post('/products', (req, res) =>{
 })
 
 
-//products id
 
-router.get('/products/:id', (req, res,) => {
-  let { id } = req.params
-  Plates.findByPk(id).then((plate) => {
-    if (plate){
-      res.json(plate)          
-    } else {
-      res.status(400).json({
-        status: '400',
-        message: 'the plate doesnt exist'
-      })
-    }
-  })
 
-})
-
-router.delete('/products/:id', (req, res) => {
+const deleteProduct = router.delete('/products/:id', (req, res) => {
   Plates.destroy({
     where:{
       id: req.params.id
@@ -68,7 +75,7 @@ router.delete('/products/:id', (req, res) => {
 
 
 
-router.put('/products/:id', (req,res) => {
+const modifyProduct = router.put('/products/:id', (req,res) => {
   Plates.update(
     { 
       nombre: req.body.nombre,
@@ -88,6 +95,6 @@ router.put('/products/:id', (req,res) => {
 
 
 
-module.exports = router
+module.exports = router, getProducts, getProductById, newProduct, modifyProduct, deleteProduct
 
 
