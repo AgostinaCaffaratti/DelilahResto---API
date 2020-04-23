@@ -5,7 +5,7 @@ const Order = require ('./models/Order-model')
 const Status = require ('./models/Status-model')
 const PayMethod = require ('./models/PayMethod-model')
 const User = require ('./../Users/Users-model')
-// const OrderHasDetail = require ('./orderhasdetail-model')
+const OrderHasDetail = require ('./orderhasdetail-model')
 
 const router = express.Router()
 
@@ -69,10 +69,9 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
     foreignKey: 'User_Id'
   })
   
-  Order.belongsToMany(OrderDetail,{ through: 'orderhasdetails', foreignKey: 'OrderID'})
-  OrderDetail.belongsToMany(Order, {through: 'orderhasdetails', foreignKey: 'OrderDetailId'})
-
-
+  
+  Order.belongsToMany(OrderDetail, {as: 'orderDet', through: 'order_has_order_detail', foreignKey: 'Order_Id'})
+  OrderDetail.belongsToMany(Order, { as: 'orderDet' ,through: 'order_has_order_detail', foreignKey: 'Order_Detail_Order_Detail_Id'})
   
 
 
@@ -112,11 +111,11 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
 
   })
 
-  const modifyOrder = router.put('/order/:id', (req,res) => {
+  const modifyOrderStatus = router.put('/order/:id', (req,res) => {
     Order.update(
       { 
         Status_Id: req.body.Status_Id,
-        OrderDetailId: req.body.OrderDetailId
+        
   
     },
     {
@@ -129,5 +128,46 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
   
   })
 
+  const newOrder = router.post('/order', (req, res) =>{
+    Order.create({
+      User_Id: req.body.User_Id,
+      hour: req.body.hour,
+      Status_Id: req.body.Status_Id,
+      Pay_Method_Id: req.body.Pay_Method_Id,
+      Total: req.body.Total
 
-  module.exports = getOrderDetail, newOrderDetail, getOrder, getOrderById, modifyOrder
+    })
+    
+      .then((order) => {
+      res.json(order)
+      
+      })
+
+    , (errors) => {
+      res.json(errors)
+    }
+
+  })
+
+  const addDetailToOrder = router.put('/order/:id/detail', (req,res,next) =>{
+    Order.findByPk(req.params.id)
+    .then(order => {
+      return order.addOrderDet(req.body.detId)
+
+    })
+    .then (res.send.bind(res))
+    .catch(next)
+  })
+
+  
+
+
+
+  
+
+  
+  
+
+  
+
+  module.exports = getOrderDetail, newOrderDetail, getOrder, getOrderById, modifyOrderStatus, newOrder, addDetailToOrder

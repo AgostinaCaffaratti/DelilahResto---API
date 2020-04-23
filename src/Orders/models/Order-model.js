@@ -4,7 +4,7 @@ const Sequelize = require ('sequelize')
 //table model - Order -
 module.exports = sequelize.define('order_', {
     Id:{
-        field:'Order_Detail_Id',
+        field:'Id',
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -22,7 +22,19 @@ module.exports = sequelize.define('order_', {
                 msg: 'hour is required'
             }
         }      
+    },
+    Total: {
+        field: 'Total',
+        type: Sequelize.FLOAT,
+        validate:{
+            notEmpty:{
+                args: true,
+                msg: 'Total is required'
+            }
+        }      
     }
+
+
     
    
   }, {

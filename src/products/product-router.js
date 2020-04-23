@@ -92,7 +92,7 @@ const modifyProduct = router.put('/products/:id', (req,res) => {
   {
     where:
     {
-      id: req.params.id
+      Plate_id: req.params.id
     }
   })
   .then( () => res.send('success'))
