@@ -66,7 +66,7 @@ const register = router.post('/users/register', (req,res) => {
         if(!user){
             User.create(userData)
              .then( user =>{
-                 res.json(user)
+                 res.json (user)
                  
              })
              .catch( err => {

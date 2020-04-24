@@ -1,5 +1,6 @@
 const Sequelize = require ('sequelize')
 
+//settings
 
 const sequelize = new Sequelize('delilah_resto', 'root', '', {
     host: 'localhost',

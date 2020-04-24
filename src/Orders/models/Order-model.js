@@ -23,17 +23,7 @@ module.exports = sequelize.define('order_', {
             }
         }      
     },
-    Total: {
-        field: 'Total',
-        type: Sequelize.FLOAT,
-        validate:{
-            notEmpty:{
-                args: true,
-                msg: 'Total is required'
-            }
-        }      
-    }
-
+   
 
     
    

@@ -1,360 +1,273 @@
--- MySQL Workbench Forward Engineering
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: delilah_resto
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.11-MariaDB
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema delilah_RestO
--- -----------------------------------------------------
+--
+-- Table structure for table `favorites_plates`
+--
 
--- -----------------------------------------------------
--- Schema delilah_RestO
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `delilah_RestO` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
--- Schema delilah_resto
--- -----------------------------------------------------
+DROP TABLE IF EXISTS `favorites_plates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `favorites_plates` (
+  `Plates_Plate_id` int(11) NOT NULL,
+  `User_User_Id` int(11) NOT NULL,
+  PRIMARY KEY (`Plates_Plate_id`,`User_User_Id`),
+  KEY `fk_Plates_has_User_User1_idx` (`User_User_Id`),
+  KEY `fk_Plates_has_User_Plates1_idx` (`Plates_Plate_id`),
+  CONSTRAINT `fk_Plates_has_User_Plates1` FOREIGN KEY (`Plates_Plate_id`) REFERENCES `plates` (`Plate_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Plates_has_User_User1` FOREIGN KEY (`User_User_Id`) REFERENCES `user` (`User_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Schema delilah_resto
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `delilah_resto` DEFAULT CHARACTER SET utf8 ;
-USE `delilah_RestO` ;
+--
+-- Dumping data for table `favorites_plates`
+--
 
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Roles`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Roles` (
-  `Role_Id` INT NOT NULL AUTO_INCREMENT,
-  `Category` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Role_Id`))
-ENGINE = InnoDB;
+LOCK TABLES `favorites_plates` WRITE;
+/*!40000 ALTER TABLE `favorites_plates` DISABLE KEYS */;
+INSERT INTO `favorites_plates` VALUES (1,1);
+/*!40000 ALTER TABLE `favorites_plates` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `order_`
+--
 
--- -----------------------------------------------------
--- Table `delilah_RestO`.`User`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`User` (
-  `User_Id` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `CompleteName` VARCHAR(255) NOT NULL,
-  `Email` VARCHAR(255) NOT NULL,
-  `Cel` INT NOT NULL,
-  `Adress` VARCHAR(255) NOT NULL,
-  `Password` VARCHAR(45) NOT NULL,
-  `Role_Id` INT NOT NULL,
-  `Token` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`User_Id`),
-  INDEX `Role_Id_idx` (`Role_Id` ASC) VISIBLE,
-  CONSTRAINT `Role_Id`
-    FOREIGN KEY (`Role_Id`)
-    REFERENCES `delilah_RestO`.`Roles` (`Role_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Plates`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Plates` (
-  `Plate_id` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `Price` FLOAT NOT NULL,
-  `Available` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Plate_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Status`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Status` (
-  `Status_Id` INT NOT NULL AUTO_INCREMENT,
-  `Status` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Status_Id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Pay_Method`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Pay_Method` (
-  `Pay_Method_Id` INT NOT NULL AUTO_INCREMENT,
-  `Pay-Method` VARCHAR(45) NULL,
-  PRIMARY KEY (`Pay_Method_Id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Order`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Order` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `User_id` INT NOT NULL,
-  `Hour` TIME NOT NULL,
-  `Status_Id` INT NOT NULL,
-  `Pay_method_Id` INT NOT NULL,
-  `Total` FLOAT NOT NULL,
+DROP TABLE IF EXISTS `order_`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `User_id` int(11) NOT NULL,
+  `Hour` time NOT NULL,
+  `Status_Id` int(11) NOT NULL,
+  `Pay_method_Id` int(11) NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `User_Id_idx` (`User_id` ASC) VISIBLE,
-  INDEX `Status_Id_idx` (`Status_Id` ASC) VISIBLE,
-  INDEX `Pay_method_idx` (`Pay_method_Id` ASC) VISIBLE,
-  CONSTRAINT `User_Id`
-    FOREIGN KEY (`User_id`)
-    REFERENCES `delilah_RestO`.`User` (`User_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Status_Id`
-    FOREIGN KEY (`Status_Id`)
-    REFERENCES `delilah_RestO`.`Status` (`Status_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Pay_method`
-    FOREIGN KEY (`Pay_method_Id`)
-    REFERENCES `delilah_RestO`.`Pay_Method` (`Pay_Method_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `User_Id_idx` (`User_id`),
+  KEY `Status_Id_idx` (`Status_Id`),
+  KEY `Pay_method_idx` (`Pay_method_Id`),
+  CONSTRAINT `Pay_method` FOREIGN KEY (`Pay_method_Id`) REFERENCES `pay_method` (`Pay_Method_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `Status_Id` FOREIGN KEY (`Status_Id`) REFERENCES `status` (`Status_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `User_Id` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `order_`
+--
 
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Order_Detail`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Order_Detail` (
-  `Order_Detail_Id` INT NOT NULL AUTO_INCREMENT,
-  `Plate_Id` INT NOT NULL,
-  `Subtotal` FLOAT NOT NULL,
+LOCK TABLES `order_` WRITE;
+/*!40000 ALTER TABLE `order_` DISABLE KEYS */;
+INSERT INTO `order_` VALUES (1,1,'15:30:00',1,1),(2,2,'17:00:00',2,2);
+/*!40000 ALTER TABLE `order_` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_detail`
+--
+
+DROP TABLE IF EXISTS `order_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_detail` (
+  `Order_Detail_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Plate_Id` int(11) NOT NULL,
+  `Subtotal` float NOT NULL,
   PRIMARY KEY (`Order_Detail_Id`),
-  INDEX `Plate_Id_idx` (`Plate_Id` ASC) VISIBLE,
-  CONSTRAINT `Plate_Id`
-    FOREIGN KEY (`Plate_Id`)
-    REFERENCES `delilah_RestO`.`Plates` (`Plate_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `Plate_Id_idx` (`Plate_Id`),
+  CONSTRAINT `Plate_Id` FOREIGN KEY (`Plate_Id`) REFERENCES `plates` (`Plate_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `order_detail`
+--
 
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Favorites_Plates`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Favorites_Plates` (
-  `Plates_Plate_id` INT NOT NULL,
-  `User_User_Id` INT NOT NULL,
-  PRIMARY KEY (`Plates_Plate_id`, `User_User_Id`),
-  INDEX `fk_Plates_has_User_User1_idx` (`User_User_Id` ASC) VISIBLE,
-  INDEX `fk_Plates_has_User_Plates1_idx` (`Plates_Plate_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Plates_has_User_Plates1`
-    FOREIGN KEY (`Plates_Plate_id`)
-    REFERENCES `delilah_RestO`.`Plates` (`Plate_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Plates_has_User_User1`
-    FOREIGN KEY (`User_User_Id`)
-    REFERENCES `delilah_RestO`.`User` (`User_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+LOCK TABLES `order_detail` WRITE;
+/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
+INSERT INTO `order_detail` VALUES (1,1,200),(2,2,250);
+/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `order_has_order_details`
+--
 
--- -----------------------------------------------------
--- Table `delilah_RestO`.`Order_has_Order_Detail`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_RestO`.`Order_has_Order_Detail` (
-  `Order_Id` INT NOT NULL,
-  `Order_Detail_Order_Detail_Id` INT NOT NULL,
-  PRIMARY KEY (`Order_Id`, `Order_Detail_Order_Detail_Id`),
-  INDEX `fk_Order_has_Order_Detail_Order_Detail1_idx` (`Order_Detail_Order_Detail_Id` ASC) VISIBLE,
-  INDEX `fk_Order_has_Order_Detail_Order1_idx` (`Order_Id` ASC) VISIBLE,
-  CONSTRAINT `fk_Order_has_Order_Detail_Order1`
-    FOREIGN KEY (`Order_Id`)
-    REFERENCES `delilah_RestO`.`Order` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Order_has_Order_Detail_Order_Detail1`
-    FOREIGN KEY (`Order_Detail_Order_Detail_Id`)
-    REFERENCES `delilah_RestO`.`Order_Detail` (`Order_Detail_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+DROP TABLE IF EXISTS `order_has_order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_has_order_details` (
+  `Order_Id` int(11) NOT NULL,
+  `Order_Detail_Order_Detail_Id` int(11) NOT NULL,
+  PRIMARY KEY (`Order_Id`,`Order_Detail_Order_Detail_Id`),
+  KEY `fk_Order_has_Order_Detail_Order_Detail1_idx` (`Order_Detail_Order_Detail_Id`),
+  KEY `fk_Order_has_Order_Detail_Order1_idx` (`Order_Id`),
+  CONSTRAINT `fk_Order_has_Order_Detail_Order1` FOREIGN KEY (`Order_Id`) REFERENCES `order_` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Order_has_Order_Detail_Order_Detail1` FOREIGN KEY (`Order_Detail_Order_Detail_Id`) REFERENCES `order_detail` (`Order_Detail_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-USE `delilah_resto` ;
+--
+-- Dumping data for table `order_has_order_detail`
+--
 
--- -----------------------------------------------------
--- Table `delilah_resto`.`plates`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`plates` (
-  `Plate_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `Price` FLOAT NOT NULL,
-  `Available` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Plate_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 29
-DEFAULT CHARACTER SET = utf8;
+LOCK TABLES `order_has_order_detail` WRITE;
+/*!40000 ALTER TABLE `order_has_order_detail` DISABLE KEYS */;
+INSERT INTO `order_has_order_detail` VALUES (1,1),(1,2),(2,1);
+/*!40000 ALTER TABLE `order_has_order_detail` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `pay_method`
+--
 
--- -----------------------------------------------------
--- Table `delilah_resto`.`roles`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`roles` (
-  `Role_Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Category` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Role_Id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8;
+DROP TABLE IF EXISTS `pay_method`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pay_method` (
+  `Pay_Method_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Pay-Method` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Pay_Method_Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `pay_method`
+--
 
--- -----------------------------------------------------
--- Table `delilah_resto`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`user` (
-  `User_Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
-  `CompleteName` VARCHAR(255) NOT NULL,
-  `Email` VARCHAR(255) NOT NULL,
-  `Cel` INT(11) NOT NULL,
-  `Adress` VARCHAR(255) NOT NULL,
-  `Password` VARCHAR(45) NOT NULL,
-  `Role_Id` INT(11) NOT NULL,
-  `Token` VARCHAR(255) NOT NULL,
+LOCK TABLES `pay_method` WRITE;
+/*!40000 ALTER TABLE `pay_method` DISABLE KEYS */;
+INSERT INTO `pay_method` VALUES (1,'Efvo'),(2,'Tarjeta');
+/*!40000 ALTER TABLE `pay_method` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `plates`
+--
+
+DROP TABLE IF EXISTS `plates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `plates` (
+  `Plate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(45) NOT NULL,
+  `Price` float NOT NULL,
+  `Available` varchar(45) NOT NULL,
+  PRIMARY KEY (`Plate_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `plates`
+--
+
+LOCK TABLES `plates` WRITE;
+/*!40000 ALTER TABLE `plates` DISABLE KEYS */;
+INSERT INTO `plates` VALUES (1,'Hamburguesa Calsica',200,'yes'),(2,'Hamburguesa Veggie',250,'yes');
+/*!40000 ALTER TABLE `plates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `Role_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Category` varchar(45) NOT NULL,
+  PRIMARY KEY (`Role_Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'Adm'),(2,'Guest');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `status`
+--
+
+DROP TABLE IF EXISTS `status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status` (
+  `Status_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Status` varchar(45) NOT NULL,
+  PRIMARY KEY (`Status_Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status`
+--
+
+LOCK TABLES `status` WRITE;
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+INSERT INTO `status` VALUES (1,'Confirmado'),(2,'Preparando'),(3,'Enviando'),(4,'Cancelado'),(5,'Etregado');
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `User_Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(45) NOT NULL,
+  `CompleteName` varchar(255) NOT NULL,
+  `Email` varchar(255) NOT NULL,
+  `Cel` int(11) NOT NULL,
+  `Adress` varchar(255) NOT NULL,
+  `Password` varchar(45) NOT NULL,
+  `Role_Id` int(11) NOT NULL,
   PRIMARY KEY (`User_Id`),
-  INDEX `Role_Id_idx` (`Role_Id` ASC) VISIBLE,
-  CONSTRAINT `Role_Id`
-    FOREIGN KEY (`Role_Id`)
-    REFERENCES `delilah_resto`.`roles` (`Role_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = utf8;
+  KEY `Role_Id_idx` (`Role_Id`),
+  CONSTRAINT `Role_Id` FOREIGN KEY (`Role_Id`) REFERENCES `roles` (`Role_Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `user`
+--
 
--- -----------------------------------------------------
--- Table `delilah_resto`.`favorites_plates`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`favorites_plates` (
-  `Plates_Plate_id` INT(11) NOT NULL,
-  `User_User_Id` INT(11) NOT NULL,
-  PRIMARY KEY (`Plates_Plate_id`, `User_User_Id`),
-  INDEX `fk_Plates_has_User_User1_idx` (`User_User_Id` ASC) VISIBLE,
-  INDEX `fk_Plates_has_User_Plates1_idx` (`Plates_Plate_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Plates_has_User_Plates1`
-    FOREIGN KEY (`Plates_Plate_id`)
-    REFERENCES `delilah_resto`.`plates` (`Plate_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Plates_has_User_User1`
-    FOREIGN KEY (`User_User_Id`)
-    REFERENCES `delilah_resto`.`user` (`User_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Mike','Mike Ross','mross@gmail.com',351626262,'Sta Rosa 15','mike123',2),(2,'Harvey','Harvey Specter','hspecter@gmail.com',351242424,'Gral Paz 25','harvey123',1);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- -----------------------------------------------------
--- Table `delilah_resto`.`order_detail`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`order_detail` (
-  `Order_Detail_Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Plate_Id` INT(11) NOT NULL,
-  `Subtotal` FLOAT NOT NULL,
-  PRIMARY KEY (`Order_Detail_Id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `delilah_resto`.`pay_method`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`pay_method` (
-  `Pay_Method_Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Pay-Method` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`Pay_Method_Id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `delilah_resto`.`status`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`status` (
-  `Status_Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Status` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Status_Id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `delilah_resto`.`order`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`order` (
-  `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Order_Detail_Id` INT(11) NOT NULL,
-  `User_id` INT(11) NOT NULL,
-  `Hour` TIME NOT NULL,
-  `Status_Id` INT(11) NOT NULL,
-  `Pay_method_Id` INT(11) NOT NULL,
-  PRIMARY KEY (`Id`),
-  INDEX `Order_Detail_Id_idx` (`Order_Detail_Id` ASC) VISIBLE,
-  INDEX `User_Id_idx` (`User_id` ASC) VISIBLE,
-  INDEX `Status_Id_idx` (`Status_Id` ASC) VISIBLE,
-  INDEX `Pay_method_idx` (`Pay_method_Id` ASC) VISIBLE,
-  CONSTRAINT `Order_Detail_Id`
-    FOREIGN KEY (`Order_Detail_Id`)
-    REFERENCES `delilah_resto`.`order_detail` (`Order_Detail_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Pay_method`
-    FOREIGN KEY (`Pay_method_Id`)
-    REFERENCES `delilah_resto`.`pay_method` (`Pay_Method_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Status_Id`
-    FOREIGN KEY (`Status_Id`)
-    REFERENCES `delilah_resto`.`status` (`Status_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `User_Id`
-    FOREIGN KEY (`User_id`)
-    REFERENCES `delilah_resto`.`user` (`User_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `delilah_resto`.`order_has_order_detail`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `delilah_resto`.`order_has_order_detail` (
-  `Order_Id` INT(11) NOT NULL,
-  `Order_Detail_Order_Detail_Id` INT(11) NOT NULL,
-  PRIMARY KEY (`Order_Id`, `Order_Detail_Order_Detail_Id`),
-  INDEX `fk_Order_has_Order_Detail_Order_Detail1_idx` (`Order_Detail_Order_Detail_Id` ASC) VISIBLE,
-  INDEX `fk_Order_has_Order_Detail_Order1_idx` (`Order_Id` ASC) VISIBLE,
-  CONSTRAINT `fk_Order_has_Order_Detail_Order1`
-    FOREIGN KEY (`Order_Id`)
-    REFERENCES `delilah_resto`.`order` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Order_has_Order_Detail_Order_Detail1`
-    FOREIGN KEY (`Order_Detail_Order_Detail_Id`)
-    REFERENCES `delilah_resto`.`order_detail` (`Order_Detail_Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- Dump completed on 2020-04-24 11:44:57

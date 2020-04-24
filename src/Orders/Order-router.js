@@ -111,7 +111,7 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
 
   })
 
-  const modifyOrderStatus = router.put('/order/:id', (req,res) => {
+  const modifyOrder = router.put('/order/:id', (req,res) => {
     Order.update(
       { 
         Status_Id: req.body.Status_Id,
@@ -124,9 +124,12 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
         id: req.params.id
       }
     })
-    .then( () => res.send('success'))
-  
+    .then( () => res.status(200).json({
+      status: '200',
+      message: 'the Status Order was modified'
+    }))
   })
+
 
   const newOrder = router.post('/order', (req, res) =>{
     Order.create({
@@ -152,7 +155,7 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
   const addDetailToOrder = router.put('/order/:id/detail', (req,res,next) =>{
     Order.findByPk(req.params.id)
     .then(order => {
-      return order.addOrderDet(req.body.detId)
+      return order.setOrderDet(req.body.detId)
 
     })
     .then (res.send.bind(res))
@@ -170,4 +173,4 @@ const getOrderDetail = router.get('/order/detail', (req, res, err) => {
 
   
 
-  module.exports = getOrderDetail, newOrderDetail, getOrder, getOrderById, modifyOrderStatus, newOrder, addDetailToOrder
+  module.exports = getOrderDetail, newOrderDetail, getOrder, getOrderById, modifyOrder, newOrder, addDetailToOrder

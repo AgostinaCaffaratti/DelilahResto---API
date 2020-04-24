@@ -69,11 +69,10 @@ const deleteProduct = router.delete('/products/:id', (req, res) => {
   let {id} = req.params
   Plates.findByPk(id).then((plates) =>{
     plates.destroy().then(() => {
-      res.status(204).json({
-        
-          status: '204',
-          message: 'the plate has been deleted'
-        })
+      res.status(200).json({
+        status: '200',
+        message: 'the plate was deleted'
+      })
       
     })
   } )
@@ -95,7 +94,10 @@ const modifyProduct = router.put('/products/:id', (req,res) => {
       Plate_id: req.params.id
     }
   })
-  .then( () => res.send('success'))
+  .then( () => res.status(200).json({
+    status: '200',
+    message: 'the plate was Modified'
+  }))
 
 })
 
